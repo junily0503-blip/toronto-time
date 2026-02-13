@@ -1,0 +1,147 @@
+<div class="outer">
+  <div class="clock-wrapper">
+    
+    <div class="time-box">
+      <div class="divider"></div>
+      <div class="time" id="hour">00</div>
+      <div class="ampm" id="ampm">AM</div>
+    </div>
+
+    <div class="gap"></div>
+
+    <div class="time-box">
+      <div class="divider"></div>
+      <div class="time" id="minute">00</div>
+      <div class="weekday" id="weekday">FRIDAY</div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+body {
+  margin: 0;
+  background: transparent;
+}
+
+.clock-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2px;
+  margin: 0 auto;
+  max-width: 290px;
+}
+
+.time-box {
+  position: relative;
+  width: 140px;
+  aspect-ratio: 3.4 / 5.2;
+  background: #F7FBF9;
+  border-radius: 18px;
+  overflow: hidden;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.divider {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: rgba(110,143,135,0.15);
+  transform: translateY(-50%);
+}
+
+/* 🔥 시간 숫자 */
+.time {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%); /* 🔥 시각 중앙 보정 */
+  font-size: 88px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: #6E8F87;
+  line-height: 1;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+/* 애니메이션 클래스 */
+.flip {
+  transform: translate(-50%, -42%);
+  opacity: 0;
+}
+
+/* AM */
+.ampm {
+  position: absolute;
+  bottom: 12px;
+  left: 8px; /* 🔥 더 사이드 */
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #6E8F87;
+}
+
+/* 요일 */
+.weekday {
+  position: absolute;
+  bottom: 12px;
+  right: 8px; /* 🔥 더 사이드 */
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #6E8F87;
+}
+</style>
+
+<script>
+function animateChange(element, newValue) {
+  element.classList.add("flip");
+
+  setTimeout(() => {
+    element.innerHTML = newValue;
+    element.classList.remove("flip");
+  }, 150);
+}
+
+function updateClock() {
+  const now = new Date();
+
+  const toronto = new Date(
+    now.toLocaleString("en-US", { timeZone: "America/Toronto" })
+  );
+
+  let hours = toronto.getHours();
+  const minutes = toronto.getMinutes();
+  const day = toronto.getDay();
+
+  const ampm = hours >= 12 ? "AM" : "AM";
+  const correctAmpm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+
+  const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+  const weekdays = [
+    "SUNDAY","MONDAY","TUESDAY","WEDNESDAY",
+    "THURSDAY","FRIDAY","SATURDAY"
+  ];
+
+  const hourEl = document.getElementById("hour");
+  const minuteEl = document.getElementById("minute");
+
+  if (hourEl.innerHTML != hours)
+    animateChange(hourEl, hours);
+
+  if (minuteEl.innerHTML != formattedMinutes)
+    animateChange(minuteEl, formattedMinutes);
+
+  document.getElementById("ampm").innerHTML = correctAmpm;
+  document.getElementById("weekday").innerHTML = weekdays[day];
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+</script>
