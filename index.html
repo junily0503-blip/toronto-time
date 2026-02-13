@@ -122,6 +122,7 @@ function updateClock() {
   hours = hours % 12;
   hours = hours ? hours : 12;
 
+  const formattedHours = hours < 10 ? "0" + hours : hours;
   const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
 
   const weekdays = [
@@ -132,8 +133,8 @@ function updateClock() {
   const hourEl = document.getElementById("hour");
   const minuteEl = document.getElementById("minute");
 
-  if (hourEl.innerHTML != hours)
-    animateChange(hourEl, hours);
+  if (hourEl.innerHTML != formattedHours)
+  animateChange(hourEl, formattedHours);
 
   if (minuteEl.innerHTML != formattedMinutes)
     animateChange(minuteEl, formattedMinutes);
@@ -145,3 +146,4 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 </script>
+
